@@ -50,7 +50,9 @@ if excel_file and docx_file:
         "Employer ESIC Monthly", "Employer ESIC Annual", "Cost to Company Monthly", "Cost to Company Annual",
         "Employee PF Monthly", "Employee PF Annual", "Employee LWF Monthly", "Employee LWF Annual",
         "Employee ESIC Monthly", "Employee ESIC Annual", "Total Deduction Monthly", "Total Deduction Annual",
-        "Net Take Home Monthly", "Net Take Home Annual"
+        "Net Take Home Monthly", "Net Take Home Annual",
+        "Statutory Leave Monthly", "Statutory Leave Annual",
+        "Ex gratia Pay Monthly", "Ex gratia Pay Annual"
     }
 
     if not required_columns.issubset(df.columns):
@@ -72,7 +74,6 @@ if excel_file and docx_file:
                     "input_designation": row["Designation"],
                     "input_department": row["Department"],
                     "input_date": row["Date"].strftime("%d-%m-%Y") if pd.notna(row["Date"]) else "",
-
 
                     # Monthly & Annual Salary Breakdown
                     "input_basic_monthly": row["Basic Monthly"],
@@ -107,6 +108,12 @@ if excel_file and docx_file:
                     "input_total_deduction_annual": row["Total Deduction Annual"],
                     "input_net_take_home_monthly": row["Net Take Home Monthly"],
                     "input_net_take_home_annual": row["Net Take Home Annual"],
+
+                    # New Pay Heads
+                    "input_statutory_leave_monthly": row["Statutory Leave Monthly"],
+                    "input_statutory_leave_annual": row["Statutory Leave Annual"],
+                    "input_exgratia_monthly": row["Ex gratia Pay Monthly"],
+                    "input_exgratia_annual": row["Ex gratia Pay Annual"],
                 }
 
                 file_name = f"Appointment_Letter_{row['Name']}_{row['EmpCode']}.docx"
