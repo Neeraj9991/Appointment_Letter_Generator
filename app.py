@@ -58,7 +58,7 @@ if excel_file and docx_file:
     else:
         st.success("✅ Excel and Word template successfully uploaded!")
 
-        if st.button("🚀 Generate and Download ZIP"):
+        if st.button("Generate and Download ZIP"):
             # Create output folder
             if not os.path.exists(output_folder):
                 os.makedirs(output_folder)
@@ -71,7 +71,8 @@ if excel_file and docx_file:
                     "input_address": row["Address"],
                     "input_designation": row["Designation"],
                     "input_department": row["Department"],
-                    "input_date": row["Date"],
+                    "input_date": row["Date"].strftime("%d-%m-%Y") if pd.notna(row["Date"]) else "",
+
 
                     # Monthly & Annual Salary Breakdown
                     "input_basic_monthly": row["Basic Monthly"],
@@ -121,7 +122,7 @@ if excel_file and docx_file:
             # Provide a download button for the ZIP file
             with open(zip_filename, "rb") as zipf:
                 st.download_button(
-                    label="📥 Download All Letters (ZIP)",
+                    label="Download All Letters (ZIP)",
                     data=zipf,
                     file_name="Appointment_Letters.zip",
                     mime="application/zip"
