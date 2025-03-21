@@ -52,7 +52,7 @@ if excel_file and docx_file:
         "Employee ESIC Monthly", "Employee ESIC Annual", "Total Deduction Monthly", "Total Deduction Annual",
         "Net Take Home Monthly", "Net Take Home Annual",
         "Statutory Leave Monthly", "Statutory Leave Annual",
-        "Ex gratia Pay Monthly", "Ex gratia Pay Annual"
+        "Ex gratia Pay Monthly", "Ex gratia Pay Annual","Employer Medical Insurance Monthly","Employer Medical Insurance Annual"
     }
 
     if not required_columns.issubset(df.columns):
@@ -69,7 +69,7 @@ if excel_file and docx_file:
             for _, row in df.iterrows():
                 data_dict = {
                     "input_name": row["Name"],
-                    "input_empcode": row["EmpCode"],
+                    "input_empcode": str(int(row["EmpCode"])) if not pd.isna(row["EmpCode"]) else "",
                     "input_address": row["Address"],
                     "input_designation": row["Designation"],
                     "input_department": row["Department"],
@@ -96,6 +96,9 @@ if excel_file and docx_file:
                     "input_employer_esic_annual": row["Employer ESIC Annual"],
                     "input_ctc_monthly": row["Cost to Company Monthly"],
                     "input_ctc_annual": row["Cost to Company Annual"],
+                    "input_employer_medical_monthly": row["Employer Medical Insurance Monthly"],
+                    "input_employer_medical_annual": row["Employer Medical Insurance Annual"],
+
 
                     # Deductions
                     "input_employee_pf_monthly": row["Employee PF Monthly"],
