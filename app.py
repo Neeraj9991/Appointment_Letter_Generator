@@ -13,7 +13,26 @@ docx_file = st.file_uploader("📂 Upload Word Template", type=["docx"])
 
 output_folder = "generated_letters"
 
-# Function to replace text placeholders in paragraphs
+# Function to clear old generated letters safely
+def clear_output_folder(folder):
+    if os.path.exists(folder):
+        # Unlock and delete each file in the folder
+        for file_name in os.listdir(folder):
+            file_path = os.path.join(folder, file_name)
+            try:
+                os.remove(file_path)  # Try deleting individual files first
+            except PermissionError:
+                st.error(f"❌ Cannot delete {file_name}. Close any open files and try again.")
+                return  # Stop execution if a file is locked
+
+        try:
+            shutil.rmtree(folder)  # Delete the entire folder after clearing files
+        except PermissionError:   
+            return
+    
+    os.makedirs(folder)  # Recreate the folder after clearing
+
+# Function to replace text placeholders in Word document
 def replace_text_in_paragraphs(doc, replacements):
     for para in doc.paragraphs:
         for key, value in replacements.items():
@@ -61,9 +80,8 @@ if excel_file and docx_file:
         st.success("✅ Excel and Word template successfully uploaded!")
 
         if st.button("Generate and Download ZIP"):
-            # Create output folder
-            if not os.path.exists(output_folder):
-                os.makedirs(output_folder)
+            # Clear old files before generating new ones
+            clear_output_folder(output_folder)
 
             file_list = []
             for _, row in df.iterrows():
@@ -98,7 +116,6 @@ if excel_file and docx_file:
                     "input_ctc_annual": row["Cost to Company Annual"],
                     "input_employer_medical_monthly": row["Employer Medical Insurance Monthly"],
                     "input_employer_medical_annual": row["Employer Medical Insurance Annual"],
-
 
                     # Deductions
                     "input_employee_pf_monthly": row["Employee PF Monthly"],
